@@ -41,7 +41,7 @@ namespace Orcamento.Controllers
             ViewData["Total"] = _context.Vendas.Include(v => v.Produto).Where(c => c.CodigoOrcamento == id).Sum(p => p.Produto.Valor).ToString();
             ViewData["CodigoOrcamento"] = id;
 
-            int clienteid = _context.Vendas.Where(v => v.CodigoOrcamento == id).FirstAsync().Result.ClienteId;
+           //int clienteid = _context.Vendas.Where(v => v.CodigoOrcamento == id).FirstAsync().Result.ClienteId;
 
             //ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome", clienteid);
             return View(applicationDbContext);
@@ -203,9 +203,20 @@ namespace Orcamento.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var venda = await _context.Vendas.FindAsync(id);
+            var codigo = venda.CodigoOrcamento;
             _context.Vendas.Remove(venda);
             await _context.SaveChangesAsync();
-            return RedirectToAction("ListaOrcamento", "Vendas", new { id = venda.CodigoOrcamento });
+
+            venda = await _context.Vendas.FindAsync(codigo);
+
+            try
+            {
+                return RedirectToAction("ListaOrcamento", "Vendas", new { id = venda.CodigoOrcamento });
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Vendas");
+            }
         }
 
         private bool VendaExists(int id)
