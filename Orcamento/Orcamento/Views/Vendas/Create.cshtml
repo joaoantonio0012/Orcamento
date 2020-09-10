@@ -7,7 +7,7 @@
     var nome = ViewData["NOME"];
 }
 
-<h1>Create</h1>
+<h1>Novo Produto</h1>
 
 <h4>Venda</h4>
 <hr />
@@ -36,7 +36,7 @@
                     <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.ClienteId" hidden></select>
                 </div>
                 <label  class="control-label">Nome</label>
-                <input type ="text"  class="form-control " value= @nome />
+                <input type ="text"  class="form-control " value= "@nome" readonly/>
             }
             <div class="form-group">
                 <label asp-for="ProdutoId" class="control-label"></label>
@@ -50,7 +50,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>
 
 @section Scripts {

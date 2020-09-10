@@ -76,8 +76,14 @@ namespace Orcamento.Controllers
 
             if (Id == null)
             {
-                
-                Id = _context.Vendas.Max(v => v.CodigoOrcamento) + 1;
+
+                try
+                {
+                    Id = _context.Vendas.Max(v => v.CodigoOrcamento) + 1;
+                }
+                catch
+                { Id = 1; }
+
                 ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome");
                 ViewData["Editar"] = "NOVO";
             }
@@ -109,7 +115,7 @@ namespace Orcamento.Controllers
 
                 await _context.Database.ExecuteSqlCommandAsync("CadastroOrcamento @CodigoOrcamento, @ClienteId,@ProdutoId ", param, param2,param3);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ListaOrcamento", "Vendas", new { id = venda.CodigoOrcamento });
             }
             ViewData["ClienteId"] = new SelectList(_context.Clientes, "Id", "Nome", venda.ClienteId);
             ViewData["ProdutoId"] = new SelectList(_context.Produtoss, "Id", "Nome", venda.ProdutoId);
